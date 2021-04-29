@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "./public/assets/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "esnext",
+        "removeComments": false,
+        "target": "es6",
+        "moduleResolution": "node",
+        "jsx": "react"
+    }
+}
