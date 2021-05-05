@@ -1,14 +1,33 @@
-/**
- * sorter
- * speed
- * number of items
- * dark mode?
- */
 import * as React from 'react';
 import Sorters from '../sorter';
 import SorterInterface from '../sorter/sorter-interface';
 
+const { useState } = React;
+
+// These will need to be passed on to the dashboard
+export interface Props {
+    onSorterChange: Function;
+    onNumberOfItemsChange: Function;
+    onSecondsPerStepChange: Function;
+}
+
 const Options = () => {
+    const [ theme, setTheme ] = useState(
+        !('theme' in localStorage) ? 'os' : localStorage.theme
+    );
+
+    document.body.classList.remove('dark');
+    document.body.classList.remove('light');
+    if (theme !== 'os') {
+        document.body.classList.add(theme);
+        localStorage.theme = theme;
+    } else {
+        document.body.classList.add(
+            window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        )
+        localStorage.removeItem('theme');
+    }
+
     const options = Sorters.map((sorter: SorterInterface) => {
         return <option key={sorter.name}>{sorter.name}</option>;
     });
@@ -25,24 +44,24 @@ const Options = () => {
             </label>
             <label className="mx-2">
                 <span className="mr-2">Number of items</span>
-                <input className="dark:bg-gray-800" type="number" />
+                <input className="dark:bg-gray-800" type="number" value="50" />
             </label>
             <label className="mx-2">
                 <span className="mr-2">Seconds per step</span>
-                <input className="dark:bg-gray-800" type="number" />
+                <input className="dark:bg-gray-800" type="number" value="1" />
             </label>
             <div className="mx-2 inline-block">
                 <button className="mx-2">Play</button>
-                <button className="mx-2">Pause</button>
                 <button className="mx-2">Restart</button>
             </div>
         </div>
         <div>
             <label>
                 <span className="mr-2">Theme:</span>
-                <select className="dark:bg-gray-800">
-                    <option>Dark</option>
-                    <option>Light</option>
+                <select className="dark:bg-gray-800" value={theme} onChange={(evt) => { setTheme(evt.target.value); }}>
+                    <option value="os">OS Theme</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
                 </select>
             </label>
         </div>
