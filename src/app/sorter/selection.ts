@@ -1,14 +1,15 @@
+import { BarItem } from "../graph";
 import SorterInterface, { StepOutputInterface } from "./sorter-interface";
 
 class Selection implements SorterInterface {
     name: string = 'Selection';
     description: string = '';
 
-    sort (items: any[]): any[] {
+    sort (items: BarItem[]): BarItem[] {
         return [];
     }
 
-    step (items: any[]): StepOutputInterface {
+    step (items: BarItem[]): StepOutputInterface {
         return {
             items: [],
             description: '',
