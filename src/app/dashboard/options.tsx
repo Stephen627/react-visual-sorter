@@ -8,10 +8,11 @@ const { useState } = React;
 export interface Props {
     onSorterChange: Function;
     onNumberOfItemsChange: Function;
+    numberOfItems: number;
     onSecondsPerStepChange: Function;
 }
 
-const Options = () => {
+const Options = (props: Props) => {
     const [ theme, setTheme ] = useState(
         !('theme' in localStorage) ? 'os' : localStorage.theme
     );
@@ -44,7 +45,12 @@ const Options = () => {
             </label>
             <label className="mx-2">
                 <span className="mr-2">Number of items</span>
-                <input className="dark:bg-gray-800" type="number" value="50" />
+                <input 
+                    className="dark:bg-gray-800"
+                    type="number"
+                    value={props.numberOfItems}
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => { props.onNumberOfItemsChange(parseInt(evt.target.value)) }}
+                />
             </label>
             <label className="mx-2">
                 <span className="mr-2">Seconds per step</span>
