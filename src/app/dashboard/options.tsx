@@ -1,15 +1,19 @@
 import * as React from 'react';
+import { BarItem } from '../graph';
 import Sorters from '../sorter';
 import SorterInterface from '../sorter/sorter-interface';
 
 const { useState } = React;
 
-// These will need to be passed on to the dashboard
 export interface Props {
     onSorterChange: Function;
     onNumberOfItemsChange: Function;
-    numberOfItems: number;
     onSecondsPerStepChange: Function;
+    numberOfItems: number;
+    secondsPerStep: number;
+    play: React.MouseEventHandler<HTMLButtonElement>;
+    restart: Function;
+    sorter: SorterInterface<BarItem>;
 }
 
 const Options = (props: Props) => {
@@ -29,8 +33,8 @@ const Options = (props: Props) => {
         localStorage.removeItem('theme');
     }
 
-    const options = Sorters.map((sorter: SorterInterface) => {
-        return <option key={sorter.name}>{sorter.name}</option>;
+    const options = Sorters.map((sorter: SorterInterface<BarItem>) => {
+        return <option value={sorter.name} key={sorter.name}>{sorter.name}</option>;
     });
 
     return <div
@@ -39,7 +43,17 @@ const Options = (props: Props) => {
         <div>
             <label className="mx-2">
                 <span className="mr-2">Sorter:</span>
-                <select className="dark:bg-gray-800">
+                <select
+                    defaultValue={props.sorter.name}
+                    className="dark:bg-gray-800"
+                    onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
+                        const sorter: SorterInterface<BarItem> = Sorters.find((item: SorterInterface<BarItem>) => {
+                            return item.name === evt.target.value;
+                        });
+
+                        props.onSorterChange(sorter);
+                    }}
+                >
                     {options}
                 </select>
             </label>
@@ -49,16 +63,24 @@ const Options = (props: Props) => {
                     className="dark:bg-gray-800"
                     type="number"
                     value={props.numberOfItems}
-                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => { props.onNumberOfItemsChange(parseInt(evt.target.value)) }}
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = parseInt(evt.target.value) || 0;
+                        props.onNumberOfItemsChange(value > 250 ? 250 : value);
+                    }}
                 />
             </label>
             <label className="mx-2">
                 <span className="mr-2">Seconds per step</span>
-                <input className="dark:bg-gray-800" type="number" value="1" />
+                <input
+                    className="dark:bg-gray-800"
+                    type="number"
+                    value={props.secondsPerStep}
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => { props.onSecondsPerStepChange(parseFloat(evt.target.value)) }}
+                />
             </label>
             <div className="mx-2 inline-block">
-                <button className="mx-2">Play</button>
-                <button className="mx-2">Restart</button>
+                <button className="mx-2" onClick={props.play}>Play</button>
+                <button className="mx-2" onClick={() => props.restart() }>Restart</button>
             </div>
         </div>
         <div>

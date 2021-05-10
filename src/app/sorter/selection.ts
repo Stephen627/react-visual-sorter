@@ -1,19 +1,12 @@
-import { BarItem } from "../graph";
-import SorterInterface, { StepOutputInterface } from "./sorter-interface";
+import AbstractSorter from "./abstract";
+import { GetValueFunction } from "./sorter-interface";
 
-class Selection implements SorterInterface {
+class Selection<T> extends AbstractSorter<T> {
     name: string = 'Selection';
     description: string = '';
 
-    sort (items: BarItem[]): BarItem[] {
-        return [];
-    }
-
-    step (items: BarItem[]): StepOutputInterface {
-        return {
-            items: [],
-            description: '',
-        };
+    sort (items: T[], getValueFunction: GetValueFunction): T[] {
+        return items;
     }
 }
 
