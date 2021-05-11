@@ -1,3 +1,4 @@
+import Observable from "../utils/observable";
 import { BarItem } from "../graph";
 
 export interface GetValueFunction {
@@ -12,5 +13,5 @@ export interface StepOutputInterface<T> {
 export default interface SorterInterface<T> {
     name: string;
     description: string;
-    sort (items: T[], getValueFunction: GetValueFunction): T[];
+    sort (items: T[], getValueFunction: GetValueFunction, delay: number): Observable;
 }
