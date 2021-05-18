@@ -112,7 +112,7 @@ module.exports = {
                 'pages/dashboard',
             ]
         }),
-        //new FaviconsWebpackPlugin('./src/images/favicon.png'),
+        new FaviconsWebpackPlugin('./src/images/favicon.png'),
         new webpack.HashedModuleIdsPlugin(),
         new MiniCssExtractPlugin({
           filename: '[name].css',
